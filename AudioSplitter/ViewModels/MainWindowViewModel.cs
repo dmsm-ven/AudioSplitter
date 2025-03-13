@@ -146,14 +146,6 @@ public partial class MainWindowViewModel : ObservableObject
 
     public bool CanExecuteUploadAllFiles()
     {
-        //foreach (var item in ChunkItems)
-        //{
-        //    if (item.TrackName.ToArray().Except(Path.GetInvalidFileNameChars()).Count() != item.TrackName.Length)
-        //    {
-        //        MessageBox.Show($"Недопустимое имя файла '{item.TrackName}'", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
-        //        return false;
-        //    }
-        //}
-        return true;
+        return ChunkItems.Count > 0;
     }
 }

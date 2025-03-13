@@ -9,7 +9,7 @@ public class ProgressPanelBackgroundColorConverter : IValueConverter
     {
         if ((bool)value)
         {
-            return new SolidColorBrush((Color)ColorConverter.ConvertFromString("#333"));
+            return new SolidColorBrush((Color)ColorConverter.ConvertFromString("#7F333333"));
         }
         return new SolidColorBrush(Colors.Transparent);
     }

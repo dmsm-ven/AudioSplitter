@@ -13,7 +13,13 @@
     d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True,
                                      Type={x:Type vm:MainWindowViewModelDesignTime}}"
     mc:Ignorable="d">
+    <Window.Background>
+        <SolidColorBrush Color="#00333333" />
+    </Window.Background>
     <Grid Margin="2">
+        <Grid.Background>
+            <ImageBrush ImageSource="/Assets/ice-age.png" TileMode="Tile" Viewport="0,0,400,400" ViewportUnits="Absolute" />
+        </Grid.Background>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
@@ -32,6 +38,7 @@
             Grid.Row="0"
             Grid.Column="0"
             Margin="2,2,8,2"
+            Style="{StaticResource TagKeyTextBlockStyle}"
             VerticalAlignment="Center"
             Text="Выбрать файл" />
         <TextBox
@@ -42,6 +49,7 @@
             VerticalContentAlignment="Center"
             FontSize="18"
             IsReadOnly="True"
+            Style="{StaticResource DefaultTextBoxStyle}"
             Text="{Binding SelectedSourceFile}" />
         <Button
             x:Name="btnSelectSourceFile"
@@ -57,6 +65,7 @@
             Grid.Row="1"
             Grid.Column="0"
             Margin="2,2,8,2"
+            Style="{StaticResource TagKeyTextBlockStyle}"
             VerticalAlignment="Center"
             Text="Количество частей" />
         <TextBox
@@ -68,14 +77,14 @@
             HorizontalAlignment="Left"
             VerticalAlignment="Stretch"
             VerticalContentAlignment="Center"
+            Style="{StaticResource DefaultTextBoxStyle}"
             Text="{Binding ChunksNumber}" />
 
         <!--  Список тэгов к заполнению, если будет больше можно вынести в отдельный список и заполнять через VM  -->
         <Grid
             Grid.Row="2"
             Grid.ColumnSpan="3"
-            Margin="12"
-            Background="WhiteSmoke">
+            Margin="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
@@ -94,7 +103,7 @@
                 x:Name="txtAuthorTag"
                 Grid.Row="0"
                 Grid.Column="1"
-                Style="{StaticResource TagValueTextBoxStyle}"
+                Style="{StaticResource DefaultTextBoxStyle}"
                 Text="{Binding TagAuthorName}" />
 
             <TextBlock
@@ -106,7 +115,7 @@
                 x:Name="txtAlbumTag"
                 Grid.Row="1"
                 Grid.Column="1"
-                Style="{StaticResource TagValueTextBoxStyle}"
+                Style="{StaticResource DefaultTextBoxStyle}"
                 Text="{Binding TagAlbumName}" />
 
             <TextBlock
@@ -118,7 +127,7 @@
                 x:Name="txtAlbumYear"
                 Grid.Row="2"
                 Grid.Column="1"
-                Style="{StaticResource TagValueTextBoxStyle}"
+                Style="{StaticResource DefaultTextBoxStyle}"
                 Text="{Binding TagYearOfRelease}" />
 
         </Grid>

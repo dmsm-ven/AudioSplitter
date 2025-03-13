@@ -8,40 +8,83 @@
     StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
+            <SolidColorBrush x:Key="MainForegroundColor">Red</SolidColorBrush>
+            <SolidColorBrush x:Key="SecondaryForegroundColor">LightBlue</SolidColorBrush>
+
             <conv:ProgressPanelBackgroundColorConverter x:Key="ProgressPanelBackgroundColorConverter" />
 
             <Style TargetType="{x:Type icons:PackIconModern}">
                 <Setter Property="Width" Value="30" />
                 <Setter Property="Height" Value="30" />
                 <Setter Property="Background" Value="Transparent" />
-                <Setter Property="Foreground" Value="Navy" />
             </Style>
             <Style x:Key="IconButton" TargetType="Button">
                 <Setter Property="Background" Value="Transparent" />
                 <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="Foreground" Value="Yellow" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border
+                                Padding="8"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="Blue"
+                                BorderThickness="1"
+                                CornerRadius="4">
+                                <ContentPresenter
+                                    x:Name="contentPresenter"
+                                    Margin="{TemplateBinding Padding}"
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                    Focusable="False"
+                                    RecognizesAccessKey="True"
+                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="true">
+                                    <Setter Property="Background" Value="Blue" />
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="true">
+                                    <Setter Property="Background" Value="Blue" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="DefaultTextBoxStyle" TargetType="TextBox">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Foreground" Value="{DynamicResource ResourceKey=MainForegroundColor}" />
+                <Setter Property="BorderThickness" Value="0,0,0,1" />
+                <Setter Property="BorderBrush" Value="{DynamicResource ResourceKey=MainForegroundColor}" />
             </Style>
             <Style x:Key="TagValueTextBoxStyle" TargetType="TextBox">
-                <Setter Property="Background" Value="Transparent" />
                 <Setter Property="VerticalAlignment" Value="Stretch" />
                 <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Foreground" Value="{DynamicResource ResourceKey=MainForegroundColor}" />
+                <Setter Property="BorderThickness" Value="0,0,0,1" />
+                <Setter Property="BorderBrush" Value="{DynamicResource ResourceKey=MainForegroundColor}" />
             </Style>
             <Style x:Key="TagKeyTextBlockStyle" TargetType="TextBlock">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Foreground" Value="{DynamicResource ResourceKey=SecondaryForegroundColor}" />
                 <Setter Property="Height" Value="30" />
                 <Setter Property="Margin" Value="2,2,8,2" />
                 <Setter Property="VerticalAlignment" Value="Center" />
             </Style>
-
             <Style x:Key="ChunkDisplayItemTitleStyle" TargetType="TextBlock">
                 <Setter Property="Margin" Value="2,2,8,2" />
-                <Setter Property="Foreground" Value="Red" />
+                <Setter Property="Foreground" Value="{DynamicResource ResourceKey=SecondaryForegroundColor}" />
             </Style>
             <Style x:Key="ChunkDisplayItemValueStyle" TargetType="TextBox">
                 <Setter Property="Background" Value="Transparent" />
                 <Setter Property="VerticalAlignment" Value="Center" />
                 <Setter Property="VerticalContentAlignment" Value="Center" />
                 <Setter Property="BorderThickness" Value="0,0,0,1" />
-                <Setter Property="BorderBrush" Value="#333" />
+                <Setter Property="BorderBrush" Value="{DynamicResource ResourceKey=MainForegroundColor}" />
                 <Setter Property="Margin" Value="2,2,18,2" />
+                <Setter Property="Foreground" Value="{DynamicResource ResourceKey=MainForegroundColor}" />
             </Style>
 
         </ResourceDictionary>
