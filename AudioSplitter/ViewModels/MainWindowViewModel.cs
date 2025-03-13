@@ -125,7 +125,7 @@ public partial class MainWindowViewModel : ObservableObject
     public async Task UploadAllFiles()
     {
         var sw = Stopwatch.StartNew();
-        var result = await splitManager.SplitFile(SelectedSourceFile, ChunkItems);
+        var result = await splitManager.SplitFile(SelectedSourceFile, TagAuthorName, TagAlbumName, ChunkItems);
         if (result.Any())
         {
             var tagsData = new Dictionary<string, string>()
@@ -146,6 +146,45 @@ public partial class MainWindowViewModel : ObservableObject
 
     public bool CanExecuteUploadAllFiles()
     {
-        return ChunkItems.Count > 0;
+        return true;
+    }
+
+    [RelayCommand]
+    public void FillChunksFromClipboard()
+    {
+        try
+        {
+            var data = Clipboard.GetText()
+                .Split(Environment.NewLine)
+                .Select(line => new
+                {
+                    TrackName = line.Split('\t')[0],
+                    TrackDuration = TimeSpan.Parse(line.Split('\t')[1])
+                }).ToArray();
+
+            if (data.Length != ChunkItems.Count)
+            {
+                MessageBox.Show("Количество элементов не совпадает");
+                return;
+            }
+
+            int i = 0;
+            foreach (var item in ChunkItems)
+            {
+                item.TrackName = data[i].TrackName;
+                item.Duration = data[i].TrackDuration;
+                i++;
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Ошибка парсинга данных: {ex.Message}\r\n{ex.StackTrace}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+    [RelayCommand]
+    public void ClearChunkItems()
+    {
+        ChunkItems.Clear();
     }
 }

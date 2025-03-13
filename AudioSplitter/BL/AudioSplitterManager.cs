@@ -13,19 +13,23 @@ public class AudioSplitterManager
         this.audioSplitter = audioSplitter;
     }
 
-    public async Task<AudioFileChunk[]> SplitFile(string sourceFileName, IList<AudioFileChunkDisplayItem> items)
+    public async Task<AudioFileChunk[]> SplitFile(string sourceFileName, string artist, string album, IList<AudioFileChunkDisplayItem> items)
     {
         bool hasErrors = false;
         List<AudioFileChunk> convertedChunks = new();
+
+        audioSplitter.Initialize(sourceFileName, artist, album);
 
         int i = 0;
         foreach (var item in items)
         {
             TimeSpan startTime = i == 0 ? TimeSpan.Zero : items[i - 1].TimeEnd;
             item.InProgress = true;
+
+
             try
             {
-                var data = await audioSplitter.GetChunk(sourceFileName, item.TrackNumber, item.TrackName, startTime, item.TimeEnd);
+                var data = await audioSplitter.GetChunk(item.TrackNumber, item.TrackName, startTime, item.TimeEnd);
                 convertedChunks.Add(data);
                 item.LengthInBytes = data.FileInfo.Length;
             }

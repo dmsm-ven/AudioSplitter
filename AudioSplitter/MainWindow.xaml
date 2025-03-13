@@ -18,7 +18,11 @@
     </Window.Background>
     <Grid Margin="2">
         <Grid.Background>
-            <ImageBrush ImageSource="/Assets/ice-age.png" TileMode="Tile" Viewport="0,0,400,400" ViewportUnits="Absolute" />
+            <ImageBrush
+                ImageSource="/Assets/ice-age.png"
+                TileMode="Tile"
+                Viewport="0,0,400,400"
+                ViewportUnits="Absolute" />
         </Grid.Background>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -38,8 +42,8 @@
             Grid.Row="0"
             Grid.Column="0"
             Margin="2,2,8,2"
-            Style="{StaticResource TagKeyTextBlockStyle}"
             VerticalAlignment="Center"
+            Style="{StaticResource TagKeyTextBlockStyle}"
             Text="Выбрать файл" />
         <TextBox
             Grid.Row="0"
@@ -65,8 +69,8 @@
             Grid.Row="1"
             Grid.Column="0"
             Margin="2,2,8,2"
-            Style="{StaticResource TagKeyTextBlockStyle}"
             VerticalAlignment="Center"
+            Style="{StaticResource TagKeyTextBlockStyle}"
             Text="Количество частей" />
         <TextBox
             x:Name="txtChunksNumber"
@@ -132,21 +136,35 @@
 
         </Grid>
 
-        <Button
+        <StackPanel
             Grid.Row="3"
             Grid.Column="0"
             Grid.ColumnSpan="3"
-            Margin="12"
-            Padding="20,10"
             HorizontalAlignment="Center"
-            Background="Blue"
-            BorderBrush="Blue"
-            Command="{Binding CreateChunksCommand}"
-            FontSize="16"
-            FontWeight="Bold"
-            Foreground="White">
-            Заполнить по шаблону
-        </Button>
+            Orientation="Horizontal">
+            <Button
+                Margin="12"
+                Command="{Binding CreateChunksCommand}"
+                Style="{StaticResource IconButton}"
+                ToolTip="Создать заголовки шаблонов будущих файлов для заполнения">
+                <icons:PackIconModern Kind="ListCreate" />
+            </Button>
+            <Button
+                Margin="12"
+                Command="{Binding FillChunksFromClipboardCommand}"
+                Style="{StaticResource IconButton}"
+                ToolTip="Загрузить данные по Имени и длительность из буфера размера (разделить знак табуляции)">
+                <icons:PackIconModern Kind="ClipboardPaste" />
+            </Button>
+            <Button
+                Margin="12"
+                Command="{Binding ClearChunkItemsCommand}"
+                FontWeight="Bold"
+                Style="{StaticResource IconButton}"
+                ToolTip="Очистить шаблоны заготовок">
+                <icons:PackIconModern Kind="Clean" />
+            </Button>
+        </StackPanel>
 
         <ItemsControl
             Grid.Row="4"
@@ -210,10 +228,7 @@
                             Margin="4,8"
                             Orientation="Horizontal">
                             <TextBlock Style="{StaticResource ChunkDisplayItemTitleStyle}" Text="Длительность отрезка" />
-                            <TextBox
-                                IsReadOnly="True"
-                                Style="{StaticResource ChunkDisplayItemValueStyle}"
-                                Text="{Binding Duration, Mode=OneWay}" />
+                            <TextBox Style="{StaticResource ChunkDisplayItemValueStyle}" Text="{Binding Duration}" />
                         </StackPanel>
                         <StackPanel
                             Grid.Column="5"

@@ -18,6 +18,7 @@ public partial class AudioFileChunkDisplayItem : ObservableObject
     public string trackName;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(Duration))]
     public TimeSpan timeStart = TimeSpan.Zero;
 
     [ObservableProperty]
@@ -27,7 +28,19 @@ public partial class AudioFileChunkDisplayItem : ObservableObject
     [ObservableProperty]
     public bool inProgress;
 
-    public TimeSpan Duration => TimeEnd - TimeStart;
+    private readonly TimeSpan duration;
+    public TimeSpan Duration
+    {
+        get => TimeEnd - TimeStart;
+        set
+        {
+            if (value != duration)
+            {
+                TimeEnd = TimeStart + value;
+                this.OnPropertyChanged(nameof(Duration));
+            }
+        }
+    }
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(FileSize))]
