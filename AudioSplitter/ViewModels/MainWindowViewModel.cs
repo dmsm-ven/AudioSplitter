@@ -1,19 +1,13 @@
 ﻿namespace AudioSplitter.ViewModels;
 
 using AudioSplitter.BL;
+using AudioSplitter.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;
-
-public partial class MainWindowViewModelDesignTime : MainWindowViewModel
-{
-    public MainWindowViewModelDesignTime() : base(null, null)
-    {
-
-    }
-}
 
 public partial class MainWindowViewModel : ObservableObject
 {
@@ -45,6 +39,9 @@ public partial class MainWindowViewModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(CreateChunksCommand))]
     public int tagYearOfRelease = DateTime.Now.Year;
 
+    [ObservableProperty]
+    public ObservableCollection<AudioFileChunkDisplayItem> chunkItems = new();
+
     public MainWindowViewModel(IAudioSplitter audioSplitter, IAduioTagWriter tagWriter)
     {
         this.audioSplitter = audioSplitter;
@@ -68,7 +65,15 @@ public partial class MainWindowViewModel : ObservableObject
     [RelayCommand(CanExecute = nameof(CreateChunksCanExecute))]
     public async Task CreateChunks()
     {
-        MessageBox.Show("OK");
+        this.ChunkItems.Clear();
+
+        Enumerable.Range(1, this.ChunksNumber).Select(i => new AudioFileChunkDisplayItem()
+        {
+            AlbumName = this.TagAlbumName,
+            ArtistName = this.TagAuthorName,
+            TrackNumber = i,
+            TrackName = "<Без имени>"
+        }).ToList().ForEach(i => this.ChunkItems.Add(i));
     }
 
     public bool CreateChunksCanExecute()
@@ -95,5 +100,16 @@ public partial class MainWindowViewModel : ObservableObject
         }
 
         return true;
+    }
+
+    [RelayCommand(CanExecute = nameof(CanExecuteUploadAllFiles))]
+    public async Task UploadAllFiles()
+    {
+        MessageBox.Show("OK");
+    }
+
+    public bool CanExecuteUploadAllFiles()
+    {
+        return false;
     }
 }

@@ -8,7 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="clr-namespace:AudioSplitter.ViewModels"
     Title="{Binding Title}"
-    Width="800"
+    Width="903"
     Height="450"
     d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True,
                                      Type={x:Type vm:MainWindowViewModelDesignTime}}"
@@ -25,6 +25,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <TextBlock
@@ -126,17 +127,99 @@
             Grid.Row="3"
             Grid.Column="0"
             Grid.ColumnSpan="3"
-            Margin="4"
+            Margin="12"
             Padding="20,10"
             HorizontalAlignment="Center"
             Background="Blue"
             BorderBrush="Blue"
+            Command="{Binding CreateChunksCommand}"
             FontSize="16"
             FontWeight="Bold"
-            Foreground="White"
-            Command="{Binding CreateChunksCommand}"
-            >
+            Foreground="White">
             Заполнить по шаблону
         </Button>
+
+        <ItemsControl
+            Grid.Row="4"
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            ItemsSource="{Binding ChunkItems}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel IsItemsHost="True" Orientation="Vertical" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <!--  track number  -->
+                            <ColumnDefinition Width="*" />
+                            <!--  name  -->
+                            <ColumnDefinition Width="Auto" />
+                            <!--  end time  -->
+                            <ColumnDefinition Width="Auto" />
+                            <!--  duration readonly  -->
+                            <ColumnDefinition Width="Auto" />
+                            <!--  filesize readonly  -->
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel
+                            Grid.Column="0"
+                            Margin="4,8"
+                            Orientation="Horizontal">
+                            <TextBlock Text="Номер трека" />
+                            <TextBox Text="{Binding TrackNumber}" />
+                        </StackPanel>
+                        <StackPanel
+                            Grid.Column="1"
+                            Margin="4,8"
+                            Orientation="Horizontal">
+                            <TextBlock Text="Имя файла" />
+                            <TextBox Text="{Binding TrackName}" />
+                        </StackPanel>
+                        <StackPanel
+                            Grid.Column="2"
+                            Margin="4,8"
+                            Orientation="Horizontal">
+                            <TextBlock Text="Время конца отрезка" />
+                            <TextBox Text="{Binding TimeEnd}" />
+                        </StackPanel>
+                        <StackPanel
+                            Grid.Column="3"
+                            Margin="4,8"
+                            Orientation="Horizontal">
+                            <TextBlock Text="Длительность отрезка" />
+                            <TextBox Text="{Binding Duration, Mode=OneWay}" />
+                        </StackPanel>
+                        <StackPanel
+                            Grid.Column="4"
+                            Margin="4,8"
+                            Orientation="Horizontal">
+                            <TextBlock Text="Размер файла" />
+                            <TextBox Text="{Binding LengthInKb, Mode=OneWay}" />
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <Button
+            Grid.Row="5"
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            Margin="12"
+            Padding="20,10"
+            HorizontalAlignment="Center"
+            Background="LawnGreen"
+            BorderBrush="LawnGreen"
+            Command="{Binding UploadAllFilesCommand}"
+            FontSize="16"
+            FontWeight="Bold"
+            Foreground="White">
+            Выгрузить файлы
+        </Button>
+
     </Grid>
 </Window>

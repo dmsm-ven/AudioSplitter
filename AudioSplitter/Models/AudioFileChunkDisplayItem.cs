@@ -5,8 +5,6 @@ namespace AudioSplitter.Models;
 
 public partial class AudioFileChunkDisplayItem : ObservableObject
 {
-    private readonly AudioFileChunk chunkInfo;
-
     [ObservableProperty]
     public string artistName;
 
@@ -17,17 +15,17 @@ public partial class AudioFileChunkDisplayItem : ObservableObject
     public int trackNumber;
 
     [ObservableProperty]
-    public string chunkFileName;
+    public string trackName;
 
     [ObservableProperty]
-    public TimeSpan timeStart;
+    public TimeSpan timeStart = TimeSpan.Zero;
 
     [ObservableProperty]
-    public TimeSpan timeEnd;
+    public TimeSpan timeEnd = TimeSpan.Zero;
 
     public TimeSpan Duration => timeEnd - timeStart;
 
-    public string LengthInKb => (chunkInfo.Data != null ? chunkInfo.Data.Length : 0).Bytes().Humanize();
+    public string LengthInKb => 0.Bytes().Humanize();
 
     public AudioFileChunkDisplayItem()
     {
