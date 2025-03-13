@@ -1,4 +1,5 @@
-﻿using AudioSplitter.ViewModels;
+﻿using AudioSplitter.BL;
+using AudioSplitter.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Windows;
@@ -25,6 +26,8 @@ namespace AudioSplitter
             HostContainer = Host.CreateDefaultBuilder()
                 .ConfigureServices((context, services) =>
                 {
+                    services.AddSingleton<IAudioSplitter, SimpleAudioSplitter>();
+                    services.AddSingleton<IAduioTagWriter, SimpleAduioTagWriter>();
                     services.AddSingleton<MainWindowViewModel>();
                 })
                 .Build();
