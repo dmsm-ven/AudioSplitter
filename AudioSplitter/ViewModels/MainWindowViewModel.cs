@@ -126,22 +126,34 @@ public partial class MainWindowViewModel : ObservableObject
     {
         var sw = Stopwatch.StartNew();
         var result = await splitManager.SplitFile(SelectedSourceFile, ChunkItems);
-        if (result)
+        if (result.Any())
         {
+            var tagsData = new Dictionary<string, string>()
+            {
+                [nameof(TagAlbumName)] = TagAlbumName,
+                [nameof(TagAuthorName)] = TagAuthorName,
+                [nameof(TagYearOfRelease)] = TagYearOfRelease.ToString()
+            };
+
+            foreach (var item in result)
+            {
+                tagsData["TrackNumber"] = item.TrackNumber.ToString();
+                this.tagWriter.SetTags(item.FileInfo.FullName, tagsData);
+            }
             MessageBox.Show($"Конвертирование выполнено за {sw.Elapsed.Humanize()}", "Выполнено", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 
     public bool CanExecuteUploadAllFiles()
     {
-        foreach (var item in ChunkItems)
-        {
-            if (item.TrackName.ToArray().Except(Path.GetInvalidFileNameChars()).Count() != item.TrackName.Length)
-            {
-                MessageBox.Show($"Недопустимое имя файла '{item.TrackName}'", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return false;
-            }
-        }
+        //foreach (var item in ChunkItems)
+        //{
+        //    if (item.TrackName.ToArray().Except(Path.GetInvalidFileNameChars()).Count() != item.TrackName.Length)
+        //    {
+        //        MessageBox.Show($"Недопустимое имя файла '{item.TrackName}'", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+        //        return false;
+        //    }
+        //}
         return true;
     }
 }

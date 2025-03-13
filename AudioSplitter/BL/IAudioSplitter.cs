@@ -7,7 +7,7 @@ namespace AudioSplitter.BL;
 
 public class FfmpegAudioSplitter : IAudioSplitter
 {
-    public async Task<AudioFileChunk> GetChunk(string sourceFile, string chunkName, TimeSpan start, TimeSpan end)
+    public async Task<AudioFileChunk> GetChunk(string sourceFile, int trackNumber, string chunkName, TimeSpan start, TimeSpan end)
     {
         string extension = Path.GetExtension(sourceFile);
         string outputFolder = Path.GetDirectoryName(sourceFile);
@@ -23,14 +23,13 @@ public class FfmpegAudioSplitter : IAudioSplitter
             })
             .ProcessAsynchronously();
 
-        await Task.Delay(TimeSpan.FromSeconds(3));
-
         var chunkInfo = new AudioFileChunk()
         {
             ChunkFileName = outputFile,
             FileInfo = new FileInfo(outputFile),
             ParentFileName = sourceFile,
             TimeStart = start,
+            TrackNumber = trackNumber,
             TimeEnd = end
         };
 
@@ -40,5 +39,5 @@ public class FfmpegAudioSplitter : IAudioSplitter
 
 public interface IAudioSplitter
 {
-    Task<AudioFileChunk> GetChunk(string sourceFile, string chunkName, TimeSpan start, TimeSpan end);
+    Task<AudioFileChunk> GetChunk(string sourceFile, int trackNumber, string chunkName, TimeSpan start, TimeSpan end);
 }

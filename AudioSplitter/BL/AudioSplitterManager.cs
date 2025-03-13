@@ -13,7 +13,7 @@ public class AudioSplitterManager
         this.audioSplitter = audioSplitter;
     }
 
-    public async Task<bool> SplitFile(string sourceFileName, IList<AudioFileChunkDisplayItem> items)
+    public async Task<AudioFileChunk[]> SplitFile(string sourceFileName, IList<AudioFileChunkDisplayItem> items)
     {
         bool hasErrors = false;
         List<AudioFileChunk> convertedChunks = new();
@@ -25,7 +25,7 @@ public class AudioSplitterManager
             item.InProgress = true;
             try
             {
-                var data = await audioSplitter.GetChunk(sourceFileName, item.TrackName, startTime, item.TimeEnd);
+                var data = await audioSplitter.GetChunk(sourceFileName, item.TrackNumber, item.TrackName, startTime, item.TimeEnd);
                 convertedChunks.Add(data);
                 item.LengthInBytes = data.FileInfo.Length;
             }
@@ -48,8 +48,9 @@ public class AudioSplitterManager
             {
                 File.Delete(file.FileInfo.FullName);
             }
+            return Enumerable.Empty<AudioFileChunk>().ToArray();
         }
 
-        return !hasErrors;
+        return convertedChunks.ToArray();
     }
 }

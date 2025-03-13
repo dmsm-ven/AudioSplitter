@@ -27,7 +27,7 @@ namespace AudioSplitter
                 .ConfigureServices((context, services) =>
                 {
                     services.AddSingleton<IAudioSplitter, FfmpegAudioSplitter>();
-                    services.AddSingleton<IAduioTagWriter, SimpleAduioTagWriter>();
+                    services.AddSingleton<IAduioTagWriter, TagLibAduioTagWriter>();
                     services.AddSingleton<AudioSplitterManager>();
                     services.AddSingleton<MainWindowViewModel>();
                 })
