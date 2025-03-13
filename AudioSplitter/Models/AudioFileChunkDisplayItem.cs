@@ -21,11 +21,20 @@ public partial class AudioFileChunkDisplayItem : ObservableObject
     public TimeSpan timeStart = TimeSpan.Zero;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(Duration))]
     public TimeSpan timeEnd = TimeSpan.Zero;
 
-    public TimeSpan Duration => timeEnd - timeStart;
+    [ObservableProperty]
+    public bool inProgress;
 
-    public string LengthInKb => 0.Bytes().Humanize();
+    public TimeSpan Duration => TimeEnd - TimeStart;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(FileSize))]
+    public long lengthInBytes;
+
+    public string FileSize => LengthInBytes.Bytes().Humanize();
+
 
     public AudioFileChunkDisplayItem()
     {

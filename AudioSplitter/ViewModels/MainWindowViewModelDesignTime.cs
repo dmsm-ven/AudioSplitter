@@ -11,8 +11,8 @@ public partial class MainWindowViewModelDesignTime : MainWindowViewModel
             AlbumName = $"Test album name",
             ArtistName = $"Test artist name",
             TrackName = $"TEST NAME #{i}",
-            TimeStart = TimeSpan.FromSeconds(0 + i * 60),
-            TimeEnd = TimeSpan.FromSeconds(60 + i * 60),
+            TimeStart = TimeSpan.FromSeconds(0 + (i - 1) * 60),
+            TimeEnd = TimeSpan.FromSeconds(60 + (i - 1) * 60),
             TrackNumber = i
         }).ToList().ForEach(item =>
         {

@@ -26,8 +26,9 @@ namespace AudioSplitter
             HostContainer = Host.CreateDefaultBuilder()
                 .ConfigureServices((context, services) =>
                 {
-                    services.AddSingleton<IAudioSplitter, SimpleAudioSplitter>();
+                    services.AddSingleton<IAudioSplitter, FfmpegAudioSplitter>();
                     services.AddSingleton<IAduioTagWriter, SimpleAduioTagWriter>();
+                    services.AddSingleton<AudioSplitterManager>();
                     services.AddSingleton<MainWindowViewModel>();
                 })
                 .Build();

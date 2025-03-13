@@ -4,16 +4,17 @@ using AudioSplitter.BL;
 using AudioSplitter.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Humanizer;
 using Microsoft.Win32;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 
 public partial class MainWindowViewModel : ObservableObject
 {
     private const string TAG_DEFAULT_VALUE = "<Не выбрано>";
-
-    private readonly IAudioSplitter audioSplitter;
+    private readonly AudioSplitterManager splitManager;
     private readonly IAduioTagWriter tagWriter;
 
     [ObservableProperty]
@@ -42,9 +43,9 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty]
     public ObservableCollection<AudioFileChunkDisplayItem> chunkItems = new();
 
-    public MainWindowViewModel(IAudioSplitter audioSplitter, IAduioTagWriter tagWriter)
+    public MainWindowViewModel(AudioSplitterManager splitManager, IAduioTagWriter tagWriter)
     {
-        this.audioSplitter = audioSplitter;
+        this.splitManager = splitManager;
         this.tagWriter = tagWriter;
     }
 
@@ -73,7 +74,25 @@ public partial class MainWindowViewModel : ObservableObject
             ArtistName = this.TagAuthorName,
             TrackNumber = i,
             TrackName = "<Без имени>"
-        }).ToList().ForEach(i => this.ChunkItems.Add(i));
+        }).ToList().ForEach(i =>
+        {
+            ChunkItems.Add(i);
+        });
+
+        var lastChunk = ChunkItems.Last();
+        for (int i = 0; i < ChunkItems.Count; i++)
+        {
+            var chunk = ChunkItems[i];
+            var nextChunk = chunk != lastChunk ? ChunkItems[i + 1] : null;
+            var prevChunk = i != 0 ? ChunkItems[i - 1] : null;
+            chunk.PropertyChanged += (o, e) =>
+            {
+                if (e.PropertyName == nameof(AudioFileChunkDisplayItem.TimeEnd) && nextChunk != null)
+                {
+                    nextChunk.TimeStart = chunk.TimeEnd;
+                }
+            };
+        }
     }
 
     public bool CreateChunksCanExecute()
@@ -105,11 +124,24 @@ public partial class MainWindowViewModel : ObservableObject
     [RelayCommand(CanExecute = nameof(CanExecuteUploadAllFiles))]
     public async Task UploadAllFiles()
     {
-        MessageBox.Show("OK");
+        var sw = Stopwatch.StartNew();
+        var result = await splitManager.SplitFile(SelectedSourceFile, ChunkItems);
+        if (result)
+        {
+            MessageBox.Show($"Конвертирование выполнено за {sw.Elapsed.Humanize()}", "Выполнено", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
     }
 
     public bool CanExecuteUploadAllFiles()
     {
-        return false;
+        foreach (var item in ChunkItems)
+        {
+            if (item.TrackName.ToArray().Except(Path.GetInvalidFileNameChars()).Count() != item.TrackName.Length)
+            {
+                MessageBox.Show($"Недопустимое имя файла '{item.TrackName}'", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+        }
+        return true;
     }
 }

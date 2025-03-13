@@ -151,12 +151,15 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Grid>
+                    <Grid Background="{Binding InProgress, Converter={StaticResource ProgressPanelBackgroundColorConverter}}">
+
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <!--  track number  -->
                             <ColumnDefinition Width="*" />
                             <!--  name  -->
+                            <ColumnDefinition Width="Auto" />
+                            <!--  start time  -->
                             <ColumnDefinition Width="Auto" />
                             <!--  end time  -->
                             <ColumnDefinition Width="Auto" />
@@ -169,36 +172,49 @@
                             Grid.Column="0"
                             Margin="4,8"
                             Orientation="Horizontal">
-                            <TextBlock Text="Номер трека" />
-                            <TextBox Text="{Binding TrackNumber}" />
+                            <TextBlock Style="{StaticResource ChunkDisplayItemTitleStyle}" Text="Номер трека" />
+                            <TextBox Style="{StaticResource ChunkDisplayItemValueStyle}" Text="{Binding TrackNumber}" />
                         </StackPanel>
                         <StackPanel
                             Grid.Column="1"
                             Margin="4,8"
                             Orientation="Horizontal">
-                            <TextBlock Text="Имя файла" />
-                            <TextBox Text="{Binding TrackName}" />
+                            <TextBlock Style="{StaticResource ChunkDisplayItemTitleStyle}" Text="Имя файла" />
+                            <TextBox Style="{StaticResource ChunkDisplayItemValueStyle}" Text="{Binding TrackName}" />
                         </StackPanel>
                         <StackPanel
                             Grid.Column="2"
                             Margin="4,8"
                             Orientation="Horizontal">
-                            <TextBlock Text="Время конца отрезка" />
-                            <TextBox Text="{Binding TimeEnd}" />
+                            <TextBlock Style="{StaticResource ChunkDisplayItemTitleStyle}" Text="Начало" />
+                            <TextBox Style="{StaticResource ChunkDisplayItemValueStyle}" Text="{Binding TimeStart}" />
                         </StackPanel>
                         <StackPanel
                             Grid.Column="3"
                             Margin="4,8"
                             Orientation="Horizontal">
-                            <TextBlock Text="Длительность отрезка" />
-                            <TextBox Text="{Binding Duration, Mode=OneWay}" />
+                            <TextBlock Style="{StaticResource ChunkDisplayItemTitleStyle}" Text="Конец" />
+                            <TextBox Style="{StaticResource ChunkDisplayItemValueStyle}" Text="{Binding TimeEnd}" />
                         </StackPanel>
                         <StackPanel
                             Grid.Column="4"
                             Margin="4,8"
                             Orientation="Horizontal">
-                            <TextBlock Text="Размер файла" />
-                            <TextBox Text="{Binding LengthInKb, Mode=OneWay}" />
+                            <TextBlock Style="{StaticResource ChunkDisplayItemTitleStyle}" Text="Длительность отрезка" />
+                            <TextBox
+                                IsReadOnly="True"
+                                Style="{StaticResource ChunkDisplayItemValueStyle}"
+                                Text="{Binding Duration, Mode=OneWay}" />
+                        </StackPanel>
+                        <StackPanel
+                            Grid.Column="5"
+                            Margin="4,8"
+                            Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource ChunkDisplayItemTitleStyle}" Text="Размер файла" />
+                            <TextBox
+                                IsReadOnly="True"
+                                Style="{StaticResource ChunkDisplayItemValueStyle}"
+                                Text="{Binding FileSize, Mode=OneWay}" />
                         </StackPanel>
                     </Grid>
                 </DataTemplate>
