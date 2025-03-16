@@ -14,7 +14,7 @@ using System.Windows;
 
 public partial class MainWindowViewModel : ObservableObject
 {
-    private const string TAG_DEFAULT_VALUE = "<Не выбрано>";
+    private const string TAG_DEFAULT_VALUE = "<Не заполнять>";
     private readonly AudioSplitterManager splitManager;
     private readonly IAduioTagWriter tagWriter;
 
@@ -39,7 +39,7 @@ public partial class MainWindowViewModel : ObservableObject
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(CreateChunksCommand))]
-    public int tagYearOfRelease = DateTime.Now.Year;
+    public string tagYearOfRelease = DateTime.Now.Year.ToString();
 
     [ObservableProperty]
     public ObservableCollection<AudioFileChunkDisplayItem> chunkItems = new();
@@ -61,6 +61,9 @@ public partial class MainWindowViewModel : ObservableObject
         chunkItems.CollectionChanged += (o, e) => HasChunkItems = ChunkItems.Count > 0;
     }
 
+    /// <summary>
+    /// Выбор файла который нужно разбить на части
+    /// </summary>
     [RelayCommand]
     public void SelectSourceFile()
     {
@@ -75,12 +78,16 @@ public partial class MainWindowViewModel : ObservableObject
         }
     }
 
-    [RelayCommand(CanExecute = nameof(CreateChunksCanExecute))]
-    public async Task CreateChunks()
+    /// <summary>
+    /// Создать элементы-шаблоны для дальнейшего заполнения. Количество = <c>ChunksNumber</c>
+    /// </summary>
+    /// <returns></returns>
+    [RelayCommand(CanExecute = nameof(CanCreateChunks))]
+    public async Task CreateChunks(int chunksNumber)
     {
         this.ChunkItems.Clear();
 
-        Enumerable.Range(1, this.ChunksNumber).Select(i => new AudioFileChunkDisplayItem()
+        Enumerable.Range(1, chunksNumber).Select(i => new AudioFileChunkDisplayItem()
         {
             AlbumName = this.TagAlbumName,
             ArtistName = this.TagAuthorName,
@@ -108,20 +115,8 @@ public partial class MainWindowViewModel : ObservableObject
         }
     }
 
-    public bool CreateChunksCanExecute()
+    public bool CanCreateChunks()
     {
-        if (TagAuthorName == TAG_DEFAULT_VALUE)
-        {
-            return false;
-        }
-        if (TagAlbumName == TAG_DEFAULT_VALUE)
-        {
-            return false;
-        }
-        if (TagYearOfRelease == 0)
-        {
-            return false;
-        }
         if (ChunksNumber <= 1)
         {
             return false;
@@ -134,30 +129,52 @@ public partial class MainWindowViewModel : ObservableObject
         return true;
     }
 
+    /// <summary>
+    /// Выгрузить файлы по созданному шаблону и заполнить аудио-теги
+    /// </summary>
+    /// <returns></returns>
     [RelayCommand(CanExecute = nameof(CanUploadAllFiles))]
     public async Task UploadAllFiles()
     {
+        // Создаем файлы
         var sw = Stopwatch.StartNew();
+
         var result = await splitManager.SplitFile(SelectedSourceFile, TagAuthorName, TagAlbumName, ChunkItems);
+
+        //Заполняем Аудио-теги файлов
         if (result.Any())
         {
-            var tagsData = new Dictionary<string, string>()
+            var tagsData = new Dictionary<string, string>();
+            if (!string.IsNullOrWhiteSpace(TagAlbumName) && TagAlbumName != TAG_DEFAULT_VALUE)
             {
-                [nameof(TagAlbumName)] = TagAlbumName,
-                [nameof(TagAuthorName)] = TagAuthorName,
-                [nameof(TagYearOfRelease)] = TagYearOfRelease.ToString(),
-            };
-
+                tagsData[nameof(TagAlbumName)] = TagAlbumName;
+            }
+            if (!string.IsNullOrWhiteSpace(TagAuthorName) && TagAuthorName != TAG_DEFAULT_VALUE)
+            {
+                tagsData[nameof(TagAuthorName)] = TagAuthorName;
+            }
+            if (!string.IsNullOrWhiteSpace(TagYearOfRelease) && uint.TryParse(TagYearOfRelease, out var year))
+            {
+                tagsData[nameof(TagYearOfRelease)] = year.ToString();
+            }
             foreach (var item in result)
             {
                 tagsData["TrackNumber"] = item.TrackNumber.ToString();
                 tagsData["TrackName"] = Path.GetFileNameWithoutExtension(item.ChunkFileName);
                 this.tagWriter.SetTags(item.FileInfo.FullName, tagsData);
             }
+
             MessageBox.Show($"Конвертирование выполнено за {sw.Elapsed.Humanize()}", "Выполнено", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 
+    /// <summary>
+    /// Загрузить данные по названи треков и длительности из буфера обмена. Разделитель знак табуляции. 
+    /// Автоматическое определение что временной отметке в зависимости от данных. Варианты: <br/>
+    /// 1) Начало каждого файла: если первый элемент начинается с 00:00:00 и каждый последующий больше предыдущего  <br/>
+    /// 2) Конец каждого файла: если тоже самое что #1, но первый элемент не равен 00:00:00 <br />
+    /// 3) Длительность каждого файла: если все елементы не равны 00:00:00
+    /// </summary>
     [RelayCommand(CanExecute = nameof(HasChunkItems))]
     public void FillChunksFromClipboard()
     {
@@ -171,6 +188,9 @@ public partial class MainWindowViewModel : ObservableObject
         }
     }
 
+    /// <summary>
+    /// Очистить элементы-шаблоны
+    /// </summary>
     [RelayCommand(CanExecute = nameof(HasChunkItems))]
     public void ClearChunkItems()
     {

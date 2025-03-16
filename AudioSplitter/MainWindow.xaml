@@ -134,6 +134,7 @@
                 <Button
                     Margin="12"
                     Command="{Binding CreateChunksCommand}"
+                    CommandParameter="{Binding ChunksNumber}"
                     Style="{StaticResource IconButton}"
                     ToolTip="Создать заголовки шаблонов будущих файлов для заполнения">
                     <icons:PackIconModern Kind="ListCreate" />
@@ -142,7 +143,7 @@
                     Margin="12"
                     Command="{Binding FillChunksFromClipboardCommand}"
                     Style="{StaticResource IconButton}"
-                    ToolTip="Загрузить данные по Имени и длительность из буфера размера (разделить знак табуляции)">
+                    ToolTip="Загрузить данные по [Имени] | [Длительности] из буфера размера (разделитель знак табуляции)">
                     <icons:PackIconModern Kind="ClipboardPaste" />
                 </Button>
                 <Button
