@@ -1,6 +1,7 @@
 ﻿namespace AudioSplitter.ViewModels;
 
 using AudioSplitter.BL;
+using AudioSplitter.Interfaces;
 using AudioSplitter.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -144,12 +145,13 @@ public partial class MainWindowViewModel : ObservableObject
             {
                 [nameof(TagAlbumName)] = TagAlbumName,
                 [nameof(TagAuthorName)] = TagAuthorName,
-                [nameof(TagYearOfRelease)] = TagYearOfRelease.ToString()
+                [nameof(TagYearOfRelease)] = TagYearOfRelease.ToString(),
             };
 
             foreach (var item in result)
             {
                 tagsData["TrackNumber"] = item.TrackNumber.ToString();
+                tagsData["TrackName"] = Path.GetFileNameWithoutExtension(item.ChunkFileName);
                 this.tagWriter.SetTags(item.FileInfo.FullName, tagsData);
             }
             MessageBox.Show($"Конвертирование выполнено за {sw.Elapsed.Humanize()}", "Выполнено", MessageBoxButton.OK, MessageBoxImage.Information);

@@ -1,4 +1,5 @@
-﻿using AudioSplitter.Models;
+﻿using AudioSplitter.Interfaces;
+using AudioSplitter.Models;
 using FFMpegCore;
 using FFMpegCore.Enums;
 using System.IO;
@@ -63,10 +64,4 @@ public class FfmpegAudioSplitter : IAudioSplitter
 
         isInitialized = true;
     }
-}
-
-public interface IAudioSplitter
-{
-    Task<AudioFileChunk> GetChunk(int trackNumber, string chunkName, TimeSpan start, TimeSpan end);
-    void Initialize(string sourceFile, string artist, string album);
 }

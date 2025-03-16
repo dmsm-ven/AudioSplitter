@@ -1,4 +1,5 @@
-﻿using AudioSplitter.ViewModels;
+﻿using AudioSplitter.Interfaces;
+using AudioSplitter.ViewModels;
 using TagLib;
 
 namespace AudioSplitter.BL;
@@ -26,6 +27,10 @@ public class TagLibAduioTagWriter : IAduioTagWriter
         {
             tfile.Tag.Track = uint.Parse(value);
         }
+        if (tagName == "TrackName")
+        {
+            tfile.Tag.Title = value;
+        }
 
         tfile.Save();
     }
@@ -37,10 +42,4 @@ public class TagLibAduioTagWriter : IAduioTagWriter
             SetTag(fileName, tag.Key, tag.Value);
         }
     }
-}
-
-public interface IAduioTagWriter
-{
-    void SetTags(string fileName, IReadOnlyDictionary<string, string> tags);
-    void SetTag(string fileName, string tagName, string value);
 }

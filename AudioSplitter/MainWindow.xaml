@@ -136,10 +136,12 @@
 
         </Grid>
 
-        <Border BorderBrush="Black" BorderThickness="0,0,0,1"
+        <Border
             Grid.Row="3"
             Grid.Column="0"
-            Grid.ColumnSpan="3">
+            Grid.ColumnSpan="3"
+            BorderBrush="Black"
+            BorderThickness="0,0,0,1">
             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                 <Button
                     Margin="12"

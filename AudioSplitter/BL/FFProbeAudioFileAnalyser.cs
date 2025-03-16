@@ -1,11 +1,7 @@
-﻿using FFMpegCore;
+﻿using AudioSplitter.Interfaces;
+using FFMpegCore;
 
 namespace AudioSplitter.BL;
-
-public interface IAudioFileAnalyser
-{
-    TimeSpan GetFileTotalDuration(string fileName);
-}
 
 public class FFProbeAudioFileAnalyser : IAudioFileAnalyser
 {

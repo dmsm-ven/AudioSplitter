@@ -1,5 +1,6 @@
 ﻿namespace AudioSplitter.BL;
 
+using AudioSplitter.Interfaces;
 using AudioSplitter.Models;
 using System.IO;
 using System.Linq;
@@ -150,14 +151,4 @@ public class AudioSplitterManager
 
         return mode;
     }
-}
-
-public record BufferParseItem(string TrackName, TimeSpan Time);
-
-internal enum TimeParseMode
-{
-    None,
-    Duration,
-    TimeStart,
-    TimeEnd
 }
