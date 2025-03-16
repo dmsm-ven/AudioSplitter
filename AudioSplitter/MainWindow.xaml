@@ -9,20 +9,21 @@
     xmlns:vm="clr-namespace:AudioSplitter.ViewModels"
     Title="{Binding Title}"
     Width="903"
-    Height="450"
     d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True,
                                      Type={x:Type vm:MainWindowViewModelDesignTime}}"
     mc:Ignorable="d">
     <Window.Background>
-        <SolidColorBrush Color="#00333333" />
+        <ImageBrush
+            ImageSource="/Assets/charred-timber.jpg"
+            TileMode="Tile"
+            Viewport="0,0,200,200"
+            ViewportUnits="Absolute" />
+
     </Window.Background>
     <Grid Margin="2">
+
         <Grid.Background>
-            <ImageBrush
-                ImageSource="/Assets/charred-timber.jpg"
-                TileMode="Tile"
-                Viewport="0,0,200,200"
-                ViewportUnits="Absolute" />
+            <SolidColorBrush Color="#7F333333" />
         </Grid.Background>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -30,6 +31,8 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -45,6 +48,7 @@
             VerticalAlignment="Center"
             Style="{StaticResource TagKeyTextBlockStyle}"
             Text="Выбрать файл" />
+        <DockPanel Grid.Row="0" Grid.Column="1" />
         <TextBox
             Grid.Row="0"
             Grid.Column="1"
@@ -73,71 +77,55 @@
             Style="{StaticResource TagKeyTextBlockStyle}"
             Text="Количество частей" />
         <TextBox
-            x:Name="txtChunksNumber"
             Grid.Row="1"
             Grid.Column="1"
             Width="40"
             Margin="0,4,2,2"
             HorizontalAlignment="Left"
-            VerticalAlignment="Stretch"
-            VerticalContentAlignment="Center"
             Style="{StaticResource DefaultTextBoxStyle}"
             Text="{Binding ChunksNumber}" />
 
         <!--  Список тэгов к заполнению, если будет больше можно вынести в отдельный список и заполнять через VM  -->
-        <Grid
+
+        <TextBlock
             Grid.Row="2"
-            Grid.ColumnSpan="3"
-            Margin="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <TextBlock
-                Grid.Row="0"
-                Grid.Column="0"
-                Style="{StaticResource TagKeyTextBlockStyle}"
-                Text="Исполнитель" />
-            <TextBox
-                x:Name="txtAuthorTag"
-                Grid.Row="0"
-                Grid.Column="1"
-                Style="{StaticResource DefaultTextBoxStyle}"
-                Text="{Binding TagAuthorName, UpdateSourceTrigger=PropertyChanged}" />
+            Grid.Column="0"
+            Style="{StaticResource TagKeyTextBlockStyle}"
+            Text="Исполнитель" />
+        <TextBox
+            Grid.Row="2"
+            Grid.Column="1"
+            Grid.ColumnSpan="2"
+            Style="{StaticResource DefaultTextBoxStyle}"
+            Text="{Binding TagAuthorName, UpdateSourceTrigger=PropertyChanged}" />
 
-            <TextBlock
-                Grid.Row="1"
-                Grid.Column="0"
-                Style="{StaticResource TagKeyTextBlockStyle}"
-                Text="Альбом" />
-            <TextBox
-                x:Name="txtAlbumTag"
-                Grid.Row="1"
-                Grid.Column="1"
-                Style="{StaticResource DefaultTextBoxStyle}"
-                Text="{Binding TagAlbumName, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBlock
+            Grid.Row="3"
+            Grid.Column="0"
+            Style="{StaticResource TagKeyTextBlockStyle}"
+            Text="Альбом" />
+        <TextBox
+            Grid.Row="3"
+            Grid.Column="1"
+            Grid.ColumnSpan="2"
+            Style="{StaticResource DefaultTextBoxStyle}"
+            Text="{Binding TagAlbumName, UpdateSourceTrigger=PropertyChanged}" />
 
-            <TextBlock
-                Grid.Row="2"
-                Grid.Column="0"
-                Style="{StaticResource TagKeyTextBlockStyle}"
-                Text="Год релиза" />
-            <TextBox
-                x:Name="txtAlbumYear"
-                Grid.Row="2"
-                Grid.Column="1"
-                Style="{StaticResource DefaultTextBoxStyle}"
-                Text="{Binding TagYearOfRelease, UpdateSourceTrigger=PropertyChanged}" />
-
-        </Grid>
+        <TextBlock
+            Grid.Row="4"
+            Grid.Column="0"
+            Style="{StaticResource TagKeyTextBlockStyle}"
+            Text="Год релиза" />
+        <TextBox
+            x:Name="txtAlbumYear"
+            Grid.Row="4"
+            Grid.Column="1"
+            Grid.ColumnSpan="2"
+            Style="{StaticResource DefaultTextBoxStyle}"
+            Text="{Binding TagYearOfRelease, UpdateSourceTrigger=PropertyChanged}" />
 
         <Border
-            Grid.Row="3"
+            Grid.Row="5"
             Grid.Column="0"
             Grid.ColumnSpan="3"
             BorderBrush="Black"
@@ -169,9 +157,10 @@
         </Border>
 
         <ItemsControl
-            Grid.Row="4"
+            Grid.Row="6"
             Grid.Column="0"
             Grid.ColumnSpan="3"
+            MinHeight="200"
             ItemsSource="{Binding ChunkItems}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -250,7 +239,7 @@
         </ItemsControl>
 
         <Border
-            Grid.Row="5"
+            Grid.Row="7"
             Grid.Column="0"
             Grid.ColumnSpan="3"
             BorderBrush="Black"
