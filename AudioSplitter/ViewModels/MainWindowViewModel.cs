@@ -49,6 +49,10 @@ public partial class MainWindowViewModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(UploadAllFilesCommand))]
     public bool hasChunkItems = false;
 
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(UploadAllFilesCommand))]
+    public bool canUploadAllFiles = false;
+
     public MainWindowViewModel(AudioSplitterManager splitManager, IAduioTagWriter tagWriter)
     {
         this.splitManager = splitManager;
@@ -94,6 +98,7 @@ public partial class MainWindowViewModel : ObservableObject
             var prevChunk = i != 0 ? ChunkItems[i - 1] : null;
             chunk.PropertyChanged += (o, e) =>
             {
+                CanUploadAllFiles = HasChunkItems && ChunkItems.All(i => i.Duration != TimeSpan.Zero && i.TimeEnd != TimeSpan.Zero);
                 if (e.PropertyName == nameof(AudioFileChunkDisplayItem.TimeEnd) && nextChunk != null)
                 {
                     nextChunk.TimeStart = chunk.TimeEnd;
@@ -149,11 +154,6 @@ public partial class MainWindowViewModel : ObservableObject
             }
             MessageBox.Show($"Конвертирование выполнено за {sw.Elapsed.Humanize()}", "Выполнено", MessageBoxButton.OK, MessageBoxImage.Information);
         }
-    }
-
-    public bool CanUploadAllFiles()
-    {
-        return HasChunkItems && ChunkItems.All(i => i.Duration != TimeSpan.Zero && i.TimeEnd != TimeSpan.Zero);
     }
 
     [RelayCommand(CanExecute = nameof(HasChunkItems))]

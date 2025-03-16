@@ -19,9 +19,9 @@
     <Grid Margin="2">
         <Grid.Background>
             <ImageBrush
-                ImageSource="/Assets/ice-age.png"
+                ImageSource="/Assets/charred-timber.jpg"
                 TileMode="Tile"
-                Viewport="0,0,400,400"
+                Viewport="0,0,200,200"
                 ViewportUnits="Absolute" />
         </Grid.Background>
         <Grid.ColumnDefinitions>
@@ -136,35 +136,35 @@
 
         </Grid>
 
-        <StackPanel
+        <Border BorderBrush="Black" BorderThickness="0,0,0,1"
             Grid.Row="3"
             Grid.Column="0"
-            Grid.ColumnSpan="3"
-            HorizontalAlignment="Center"
-            Orientation="Horizontal">
-            <Button
-                Margin="12"
-                Command="{Binding CreateChunksCommand}"
-                Style="{StaticResource IconButton}"
-                ToolTip="Создать заголовки шаблонов будущих файлов для заполнения">
-                <icons:PackIconModern Kind="ListCreate" />
-            </Button>
-            <Button
-                Margin="12"
-                Command="{Binding FillChunksFromClipboardCommand}"
-                Style="{StaticResource IconButton}"
-                ToolTip="Загрузить данные по Имени и длительность из буфера размера (разделить знак табуляции)">
-                <icons:PackIconModern Kind="ClipboardPaste" />
-            </Button>
-            <Button
-                Margin="12"
-                Command="{Binding ClearChunkItemsCommand}"
-                FontWeight="Bold"
-                Style="{StaticResource IconButton}"
-                ToolTip="Очистить шаблоны заготовок">
-                <icons:PackIconModern Kind="Clean" />
-            </Button>
-        </StackPanel>
+            Grid.ColumnSpan="3">
+            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                <Button
+                    Margin="12"
+                    Command="{Binding CreateChunksCommand}"
+                    Style="{StaticResource IconButton}"
+                    ToolTip="Создать заголовки шаблонов будущих файлов для заполнения">
+                    <icons:PackIconModern Kind="ListCreate" />
+                </Button>
+                <Button
+                    Margin="12"
+                    Command="{Binding FillChunksFromClipboardCommand}"
+                    Style="{StaticResource IconButton}"
+                    ToolTip="Загрузить данные по Имени и длительность из буфера размера (разделить знак табуляции)">
+                    <icons:PackIconModern Kind="ClipboardPaste" />
+                </Button>
+                <Button
+                    Margin="12"
+                    Command="{Binding ClearChunkItemsCommand}"
+                    FontWeight="Bold"
+                    Style="{StaticResource IconButton}"
+                    ToolTip="Очистить шаблоны заготовок">
+                    <icons:PackIconModern Kind="Clean" />
+                </Button>
+            </StackPanel>
+        </Border>
 
         <ItemsControl
             Grid.Row="4"
@@ -236,6 +236,8 @@
                             Orientation="Horizontal">
                             <TextBlock Style="{StaticResource ChunkDisplayItemTitleStyle}" Text="Размер файла" />
                             <TextBox
+                                Width="55"
+                                HorizontalContentAlignment="Center"
                                 IsReadOnly="True"
                                 Style="{StaticResource ChunkDisplayItemValueStyle}"
                                 Text="{Binding FileSize, Mode=OneWay}" />
@@ -245,17 +247,21 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-        <Button
+        <Border
             Grid.Row="5"
             Grid.Column="0"
             Grid.ColumnSpan="3"
-            Margin="12"
-            HorizontalAlignment="Center"
-            Command="{Binding UploadAllFilesCommand}"
-            Style="{StaticResource IconButton}"
-            ToolTip="Выгрузить файлы">
-            <icons:PackIconModern Kind="Music" />
-        </Button>
+            BorderBrush="Black"
+            BorderThickness="0,1,0,0">
+            <Button
+                Margin="12"
+                HorizontalAlignment="Center"
+                Command="{Binding UploadAllFilesCommand}"
+                Style="{StaticResource IconButton}"
+                ToolTip="Выгрузить файлы">
+                <icons:PackIconModern Kind="Music" />
+            </Button>
+        </Border>
 
     </Grid>
 </Window>
