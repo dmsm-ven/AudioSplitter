@@ -108,7 +108,7 @@
                 Grid.Row="0"
                 Grid.Column="1"
                 Style="{StaticResource DefaultTextBoxStyle}"
-                Text="{Binding TagAuthorName}" />
+                Text="{Binding TagAuthorName, UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock
                 Grid.Row="1"
@@ -120,7 +120,7 @@
                 Grid.Row="1"
                 Grid.Column="1"
                 Style="{StaticResource DefaultTextBoxStyle}"
-                Text="{Binding TagAlbumName}" />
+                Text="{Binding TagAlbumName, UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock
                 Grid.Row="2"
@@ -132,7 +132,7 @@
                 Grid.Row="2"
                 Grid.Column="1"
                 Style="{StaticResource DefaultTextBoxStyle}"
-                Text="{Binding TagYearOfRelease}" />
+                Text="{Binding TagYearOfRelease, UpdateSourceTrigger=PropertyChanged}" />
 
         </Grid>
 
@@ -250,15 +250,11 @@
             Grid.Column="0"
             Grid.ColumnSpan="3"
             Margin="12"
-            Padding="20,10"
             HorizontalAlignment="Center"
-            Background="LawnGreen"
-            BorderBrush="LawnGreen"
             Command="{Binding UploadAllFilesCommand}"
-            FontSize="16"
-            FontWeight="Bold"
-            Foreground="White">
-            Выгрузить файлы
+            Style="{StaticResource IconButton}"
+            ToolTip="Выгрузить файлы">
+            <icons:PackIconModern Kind="Music" />
         </Button>
 
     </Grid>

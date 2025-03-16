@@ -28,6 +28,7 @@ namespace AudioSplitter
                 {
                     services.AddSingleton<IAudioSplitter, FfmpegAudioSplitter>();
                     services.AddSingleton<IAduioTagWriter, TagLibAduioTagWriter>();
+                    services.AddSingleton<IAudioFileAnalyser, FFProbeAudioFileAnalyser>();
                     services.AddSingleton<AudioSplitterManager>();
                     services.AddSingleton<MainWindowViewModel>();
                 })

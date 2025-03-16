@@ -43,10 +43,17 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty]
     public ObservableCollection<AudioFileChunkDisplayItem> chunkItems = new();
 
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(ClearChunkItemsCommand))]
+    [NotifyCanExecuteChangedFor(nameof(FillChunksFromClipboardCommand))]
+    [NotifyCanExecuteChangedFor(nameof(UploadAllFilesCommand))]
+    public bool hasChunkItems = false;
+
     public MainWindowViewModel(AudioSplitterManager splitManager, IAduioTagWriter tagWriter)
     {
         this.splitManager = splitManager;
         this.tagWriter = tagWriter;
+        chunkItems.CollectionChanged += (o, e) => HasChunkItems = ChunkItems.Count > 0;
     }
 
     [RelayCommand]
@@ -121,7 +128,7 @@ public partial class MainWindowViewModel : ObservableObject
         return true;
     }
 
-    [RelayCommand(CanExecute = nameof(CanExecuteUploadAllFiles))]
+    [RelayCommand(CanExecute = nameof(CanUploadAllFiles))]
     public async Task UploadAllFiles()
     {
         var sw = Stopwatch.StartNew();
@@ -144,37 +151,17 @@ public partial class MainWindowViewModel : ObservableObject
         }
     }
 
-    public bool CanExecuteUploadAllFiles()
+    public bool CanUploadAllFiles()
     {
-        return true;
+        return HasChunkItems && ChunkItems.All(i => i.Duration != TimeSpan.Zero && i.TimeEnd != TimeSpan.Zero);
     }
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(HasChunkItems))]
     public void FillChunksFromClipboard()
     {
         try
         {
-            var data = Clipboard.GetText()
-                .Split(Environment.NewLine)
-                .Select(line => new
-                {
-                    TrackName = line.Split('\t')[0],
-                    TrackDuration = TimeSpan.Parse(line.Split('\t')[1])
-                }).ToArray();
-
-            if (data.Length != ChunkItems.Count)
-            {
-                MessageBox.Show("Количество элементов не совпадает");
-                return;
-            }
-
-            int i = 0;
-            foreach (var item in ChunkItems)
-            {
-                item.TrackName = data[i].TrackName;
-                item.Duration = data[i].TrackDuration;
-                i++;
-            }
+            splitManager.FillTimeFromClipboard(Clipboard.GetText(), SelectedSourceFile, ChunkItems);
         }
         catch (Exception ex)
         {
@@ -182,7 +169,7 @@ public partial class MainWindowViewModel : ObservableObject
         }
     }
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(HasChunkItems))]
     public void ClearChunkItems()
     {
         ChunkItems.Clear();

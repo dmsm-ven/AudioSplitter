@@ -47,6 +47,9 @@
                                 <Trigger Property="IsPressed" Value="true">
                                     <Setter Property="Background" Value="Blue" />
                                 </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Opacity" Value="0.25" />
+                                </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Setter.Value>
