@@ -7,6 +7,7 @@
     xmlns:local="clr-namespace:AudioSplitter"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="clr-namespace:AudioSplitter.ViewModels"
+    IsEnabled="{Binding IsEnabled}"
     Title="{Binding Title}"
     Width="903"
     d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True,
@@ -48,17 +49,30 @@
             VerticalAlignment="Center"
             Style="{StaticResource TagKeyTextBlockStyle}"
             Text="Выбрать файл" />
-        <DockPanel Grid.Row="0" Grid.Column="1" />
-        <TextBox
-            Grid.Row="0"
-            Grid.Column="1"
-            Height="36"
-            VerticalAlignment="Center"
-            VerticalContentAlignment="Center"
-            FontSize="18"
-            IsReadOnly="True"
-            Style="{StaticResource DefaultTextBoxStyle}"
-            Text="{Binding SelectedSourceFile}" />
+        <DockPanel Grid.Row="0" Grid.Column="1" LastChildFill="True">
+
+            <TextBox DockPanel.Dock="Right"
+                                Width="55"
+                     Margin="2,2,2,8"
+                                HorizontalContentAlignment="Center"
+                     VerticalAlignment="Bottom"
+                                IsReadOnly="True"
+                                Style="{StaticResource ChunkDisplayItemValueStyle}"
+                                Text="{Binding SelectedSourceFileSize, Mode=OneWay}" />
+            <TextBlock Text="Размер файла" DockPanel.Dock="Right"
+                       Style="{StaticResource ChunkDisplayItemTitleStyle}"/>
+            <TextBox
+                Grid.Row="0"
+                Grid.Column="1"
+                Height="36"
+                VerticalAlignment="Center"
+                VerticalContentAlignment="Center"
+                FontSize="14"
+                IsReadOnly="True"
+                Style="{StaticResource DefaultTextBoxStyle}"
+                Text="{Binding SelectedSourceFile}" />
+        </DockPanel>
+
         <Button
             x:Name="btnSelectSourceFile"
             Grid.Row="0"

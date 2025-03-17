@@ -4,6 +4,7 @@ using AudioSplitter.Interfaces;
 using AudioSplitter.Models;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 
 public class AudioSplitterManager
@@ -64,6 +65,10 @@ public class AudioSplitterManager
 
     public void FillTimeFromClipboard(string clipboardText, string sourceFile, IList<AudioFileChunkDisplayItem> items)
     {
+        //Добавляем часы для парсинга TimeSpan 13:45 => 00:13:45
+
+        clipboardText = Regex.Replace(clipboardText, @"(\d{2}):(\d{2})", "00:$1:$2");
+
         var rawData = clipboardText.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
             .Select(line => line.Split('\t'))
             .ToArray();

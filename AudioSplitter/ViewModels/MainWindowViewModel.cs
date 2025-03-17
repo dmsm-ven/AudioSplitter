@@ -19,11 +19,15 @@ public partial class MainWindowViewModel : ObservableObject
     private readonly IAduioTagWriter tagWriter;
 
     [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(CreateChunksCommand))]
-    public string selectedSourceFile = @"C:\users\user\Desktop\123.m4a";
+    public string title = "Audio Splitter";
 
     [ObservableProperty]
-    public string title = "Audio Splitter";
+    public bool isEnabled = true;
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(CreateChunksCommand))]
+    [NotifyPropertyChangedFor(nameof(SelectedSourceFileSize))]
+    public string selectedSourceFile = @"C:\users\user\Desktop\123.m4a";
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(CreateChunksCommand))]
@@ -53,6 +57,15 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(UploadAllFilesCommand))]
     public bool canUploadAllFiles = false;
+
+    public string SelectedSourceFileSize
+    {
+        get
+        {
+            return (File.Exists(SelectedSourceFile) ? new FileInfo(SelectedSourceFile).Length : 0)
+                .Bytes().Humanize();
+        }
+    }
 
     public MainWindowViewModel(AudioSplitterManager splitManager, IAduioTagWriter tagWriter)
     {
