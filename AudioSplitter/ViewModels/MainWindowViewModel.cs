@@ -27,7 +27,7 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(CreateChunksCommand))]
     [NotifyPropertyChangedFor(nameof(SelectedSourceFileSize))]
-    public string selectedSourceFile = @"C:\users\user\Desktop\123.m4a";
+    public string selectedSourceFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "123.m4a");
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(CreateChunksCommand))]
@@ -82,7 +82,7 @@ public partial class MainWindowViewModel : ObservableObject
     {
         var ofd = new OpenFileDialog()
         {
-            Title = "Выберите файл который нужно разрезать на части",
+            Title = "Выберите исходный файл",
             Filter = "M4A|*.m4a|MP3|*.mp3"
         };
         if (ofd.ShowDialog() == true)
