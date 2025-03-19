@@ -15,16 +15,16 @@
     mc:Ignorable="d">
     <Window.Background>
         <ImageBrush
-            ImageSource="/Assets/charred-timber.jpg"
-            TileMode="Tile"
-            Viewport="0,0,200,200"
-            ViewportUnits="Absolute" />
+            ImageSource="/Assets/dark-mosaic.png"
+            TileMode="FlipXY"
+            Viewport="0,0,300,295"
+            ViewportUnits="Absolute"
+            Stretch="Fill"/>
 
     </Window.Background>
     <Grid Margin="2">
-
         <Grid.Background>
-            <SolidColorBrush Color="#7F333333" />
+            <SolidColorBrush Color="#2244bafa" />
         </Grid.Background>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
